@@ -1,11 +1,19 @@
-import express, {Request, Response} from 'express';
+// import express, {Request, Response} from 'express';
 import 'dotenv/config';
-const app = express();
+import mongoose from 'mongoose';
+import app from './app';
 
-app.get('/', (req: Request, res: Response) => {
-    res.send('Server is up and running');
-});
+// let server: Server;
+async function main() {
+    try {
+        await mongoose.connect(`${process.env.URI}`);
+        console.log('connected to mongodb using mongoose');
+        app.listen(process.env.PORT, () => {
+            console.log(`Server is listening on port ${process.env.PORT}`);
+        });
+    } catch (error) {
+        console.log(error);
+    }
+}
 
-app.listen(process.env.PORT, () => {
-    console.log(`Server is listening on port ${process.env.PORT}`);
-});
+main();
