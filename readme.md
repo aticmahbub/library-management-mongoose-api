@@ -46,14 +46,14 @@ MONGO_URI=mongodb://localhost:27017/library-management-api-mongoose
 
 ### 4. Run the Server
 
-```bash
 Development:
+```bash
 npm run dev
-
+```
 Production:
+```bash
 npm run build
 npm start
-
 ```
 ## API Endpoints
 
