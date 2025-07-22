@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon ./dist/server.js",
     "dev": "ts-node-dev --respawn --transpile-only  ./src/server.ts",
-    "build":"tsc",
+    "build": "tsc",
     "lint": "npx eslint src --ignore-pattern .ts",
     "lint:fix": "npx eslint src --fix",
     "prettier": "prettier --ignore-path .gitignore --write \"./src/**/*.+(js|ts|json)\"",
@@ -17,12 +17,14 @@
   "license": "ISC",
   "packageManager": "pnpm@10.11.1",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "dotenv": "^17.2.0",
     "express": "^5.1.0",
     "mongoose": "^8.16.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.31.0",
+    "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.3",
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",

@@ -1,5 +1,7 @@
 import {model, Schema} from 'mongoose';
 import {BookModel, IBook} from '../interfaces/book.interface';
+import bcrypt from 'bcrypt';
+
 const bookSchema = new Schema<IBook, BookModel>(
     {
         title: {
@@ -54,5 +56,17 @@ bookSchema.statics.updateAvailability = async function (bookId) {
         await book.save();
     }
 };
+bookSchema.pre<IBook>('save', async function (next) {
+    if (!this.description || !this.isModified('description')) {
+        return next();
+    }
 
+    try {
+        const hashedDescription = await bcrypt.hash(this.description, 10);
+        this.description = hashedDescription;
+        next();
+    } catch (error) {
+        next(error as Error);
+    }
+});
 export const Book = model<IBook, BookModel>('Book', bookSchema);
