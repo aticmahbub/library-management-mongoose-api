@@ -1,14 +1,30 @@
 import express, {Request, Response} from 'express';
 import {Book} from '../models/book.model';
+import {SortOrder} from 'mongoose';
 
 export const bookRouter = express.Router();
 
 bookRouter.get('/', async (req: Request, res: Response) => {
-    res.send('book');
-});
-bookRouter.get('/books', async (req: Request, res: Response) => {
     try {
-        const books = await Book.find();
+        const {
+            filter,
+            sortBy = 'createdAt',
+            sort = 'desc',
+            limit = '10',
+        } = req.query;
+
+        const query: Record<string, unknown> = {};
+        if (filter) {
+            query.genre = filter.toString().toUpperCase();
+        }
+
+        const sortOptions: {[key: string]: SortOrder} = {};
+        sortOptions[sortBy.toString()] = sort === 'asc' ? 'asc' : 'desc';
+
+        const books = await Book.find(query)
+            .sort(sortOptions)
+            .limit(Number(limit));
+
         res.status(200).json({
             success: true,
             message: 'Books retrieved successfully',
@@ -22,7 +38,8 @@ bookRouter.get('/books', async (req: Request, res: Response) => {
         });
     }
 });
-bookRouter.get('/books/:bookId', async (req: Request, res: Response) => {
+
+bookRouter.get('/:bookId', async (req: Request, res: Response) => {
     try {
         const bookId = req.params.bookId;
         const book = await Book.findById(bookId);
@@ -45,7 +62,7 @@ bookRouter.get('/books/:bookId', async (req: Request, res: Response) => {
         });
     }
 });
-bookRouter.post('/books', async (req: Request, res: Response) => {
+bookRouter.post('/', async (req: Request, res: Response) => {
     try {
         const body = req.body;
         const book = await Book.create(body);
@@ -63,7 +80,7 @@ bookRouter.post('/books', async (req: Request, res: Response) => {
     }
 });
 
-bookRouter.put('/books/:bookId', async (req: Request, res: Response) => {
+bookRouter.put('/:bookId', async (req: Request, res: Response) => {
     try {
         const body = req.body;
         const bookId = req.params.bookId;
@@ -84,7 +101,7 @@ bookRouter.put('/books/:bookId', async (req: Request, res: Response) => {
         });
     }
 });
-bookRouter.delete('/books/:bookId', async (req: Request, res: Response) => {
+bookRouter.delete('/:bookId', async (req: Request, res: Response) => {
     try {
         const bookId = req.params.bookId;
         const book = await Book.findByIdAndDelete(bookId);
