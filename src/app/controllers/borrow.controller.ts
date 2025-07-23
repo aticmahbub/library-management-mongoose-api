@@ -7,7 +7,6 @@ export const borrowRouter = express.Router();
 borrowRouter.post('/', async (req: Request, res: Response) => {
     try {
         const {book: bookId, quantity, dueDate} = req.body;
-
         if (!bookId || !quantity || !dueDate) {
             return res
                 .status(400)
@@ -31,13 +30,14 @@ borrowRouter.post('/', async (req: Request, res: Response) => {
         await book.save();
 
         await Book.updateAvailability(book._id as Types.ObjectId);
-
-        const borrow = await Borrow.create({book: book._id, quantity, dueDate});
+        // console.log(book, quantity, dueDate);
+        await Borrow.create({book: book._id, quantity, dueDate});
+        const borrowedBook = await Book.findById(book._id);
 
         res.status(201).json({
             success: true,
             message: 'Book borrowed successfully',
-            data: borrow,
+            data: borrowedBook,
         });
     } catch (error) {
         res.status(500).json({

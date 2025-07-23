@@ -66,6 +66,7 @@ bookRouter.post('/', async (req: Request, res: Response) => {
     try {
         const body = req.body;
         const book = await Book.create(body);
+        console.log(book);
         res.status(201).json({
             success: true,
             message: 'Book created successfully',

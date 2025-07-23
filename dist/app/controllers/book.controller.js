@@ -70,6 +70,7 @@ exports.bookRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, fun
     try {
         const body = req.body;
         const book = yield book_model_1.Book.create(body);
+        console.log(book);
         res.status(201).json({
             success: true,
             message: 'Book created successfully',

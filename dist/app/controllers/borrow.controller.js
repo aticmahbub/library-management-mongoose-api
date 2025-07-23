@@ -39,11 +39,13 @@ exports.borrowRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, f
         book.copies -= quantity;
         yield book.save();
         yield book_model_1.Book.updateAvailability(book._id);
-        const borrow = yield borrow_model_1.Borrow.create({ book: book._id, quantity, dueDate });
+        // console.log(book, quantity, dueDate);
+        yield borrow_model_1.Borrow.create({ book: book._id, quantity, dueDate });
+        const borrowedBook = yield book_model_1.Book.findById(book._id);
         res.status(201).json({
             success: true,
             message: 'Book borrowed successfully',
-            data: borrow,
+            data: borrowedBook,
         });
     }
     catch (error) {
