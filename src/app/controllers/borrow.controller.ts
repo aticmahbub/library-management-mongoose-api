@@ -4,16 +4,16 @@ import {Book} from '../models/book.model';
 import {Types} from 'mongoose';
 export const borrowRouter = express.Router();
 
-borrowRouter.post('/', async (req: Request, res: Response) => {
+borrowRouter.put('/', async (req: Request, res: Response) => {
     try {
-        const {book: bookId, quantity, dueDate} = req.body;
-        if (!bookId || !quantity || !dueDate) {
+        const {id, quantity, dueDate} = req.body;
+        if (!id || !quantity || !dueDate) {
             return res
                 .status(400)
                 .json({success: false, message: 'Missing required fields'});
         }
 
-        const book = await Book.findById(bookId);
+        const book = await Book.findById(id);
         if (!book) {
             return res
                 .status(404)
@@ -30,7 +30,7 @@ borrowRouter.post('/', async (req: Request, res: Response) => {
         await book.save();
 
         await Book.updateAvailability(book._id as Types.ObjectId);
-        // console.log(book, quantity, dueDate);
+
         await Borrow.create({book: book._id, quantity, dueDate});
         const borrowedBook = await Book.findById(book._id);
 

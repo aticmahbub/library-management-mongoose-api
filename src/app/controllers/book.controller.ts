@@ -39,10 +39,10 @@ bookRouter.get('/', async (req: Request, res: Response) => {
     }
 });
 
-bookRouter.get('/:bookId', async (req: Request, res: Response) => {
+bookRouter.get('/:id', async (req: Request, res: Response) => {
     try {
-        const bookId = req.params.bookId;
-        const book = await Book.findById(bookId);
+        const id = req.params.id;
+        const book = await Book.findById(id);
         if (!book) {
             return res.status(404).json({
                 success: false,
@@ -66,7 +66,6 @@ bookRouter.post('/', async (req: Request, res: Response) => {
     try {
         const body = req.body;
         const book = await Book.create(body);
-        console.log(book);
         res.status(201).json({
             success: true,
             message: 'Book created successfully',
@@ -81,11 +80,11 @@ bookRouter.post('/', async (req: Request, res: Response) => {
     }
 });
 
-bookRouter.put('/:bookId', async (req: Request, res: Response) => {
+bookRouter.put('/:id', async (req: Request, res: Response) => {
     try {
         const body = req.body;
-        const bookId = req.params.bookId;
-        const book = await Book.findByIdAndUpdate(bookId, body, {
+        const id = req.params.id;
+        const book = await Book.findByIdAndUpdate(id, body, {
             new: true,
             runValidators: true,
         });
@@ -102,10 +101,10 @@ bookRouter.put('/:bookId', async (req: Request, res: Response) => {
         });
     }
 });
-bookRouter.delete('/:bookId', async (req: Request, res: Response) => {
+bookRouter.delete('/:id', async (req: Request, res: Response) => {
     try {
-        const bookId = req.params.bookId;
-        const book = await Book.findByIdAndDelete(bookId);
+        const id = req.params.id;
+        const book = await Book.findByIdAndDelete(id);
 
         if (!book) {
             return res.status(404).json({
@@ -113,7 +112,7 @@ bookRouter.delete('/:bookId', async (req: Request, res: Response) => {
                 message: 'Book not found or already deleted',
             });
         }
-        const checkDeleted = await Book.findById(bookId);
+        const checkDeleted = await Book.findById(id);
 
         res.status(200).json({
             success: true,
