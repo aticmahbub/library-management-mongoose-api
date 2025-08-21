@@ -3,7 +3,7 @@ import {IBorrow} from '../interfaces/borrow.interface';
 
 const borrowSchema = new Schema<IBorrow>(
     {
-        book: {
+        id: {
             type: Schema.Types.ObjectId,
             ref: 'Book',
             required: true,
