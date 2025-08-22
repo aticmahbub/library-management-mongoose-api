@@ -15,19 +15,25 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.bookRouter = void 0;
 const express_1 = __importDefault(require("express"));
 const book_model_1 = require("../models/book.model");
+// import {SortOrder} from 'mongoose';
 exports.bookRouter = express_1.default.Router();
 exports.bookRouter.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { filter, sortBy = 'createdAt', sort = 'desc', limit = '10', } = req.query;
+        // const {
+        //     filter,
+        //     sortBy = 'createdAt',
+        //     sort = 'desc',
+        //     limit = '10',
+        // } = req.query;
         const query = {};
-        if (filter) {
-            query.genre = filter.toString().toUpperCase();
-        }
-        const sortOptions = {};
-        sortOptions[sortBy.toString()] = sort === 'asc' ? 'asc' : 'desc';
-        const books = yield book_model_1.Book.find(query)
-            .sort(sortOptions)
-            .limit(Number(limit));
+        // if (filter) {
+        //     query.genre = filter.toString().toUpperCase();
+        // }
+        // const sortOptions: {[key: string]: SortOrder} = {};
+        // sortOptions[sortBy.toString()] = sort === 'asc' ? 'asc' : 'desc';
+        const books = yield book_model_1.Book.find(query);
+        // .sort(sortOptions)
+        // .limit(Number(limit));
         res.status(200).json({
             success: true,
             message: 'Books retrieved successfully',
@@ -42,10 +48,10 @@ exports.bookRouter.get('/', (req, res) => __awaiter(void 0, void 0, void 0, func
         });
     }
 }));
-exports.bookRouter.get('/:bookId', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.bookRouter.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const bookId = req.params.bookId;
-        const book = yield book_model_1.Book.findById(bookId);
+        const id = req.params.id;
+        const book = yield book_model_1.Book.findById(id);
         if (!book) {
             return res.status(404).json({
                 success: false,
@@ -70,7 +76,6 @@ exports.bookRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, fun
     try {
         const body = req.body;
         const book = yield book_model_1.Book.create(body);
-        console.log(book);
         res.status(201).json({
             success: true,
             message: 'Book created successfully',
@@ -85,11 +90,11 @@ exports.bookRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, fun
         });
     }
 }));
-exports.bookRouter.put('/:bookId', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.bookRouter.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const body = req.body;
-        const bookId = req.params.bookId;
-        const book = yield book_model_1.Book.findByIdAndUpdate(bookId, body, {
+        const id = req.params.id;
+        const book = yield book_model_1.Book.findByIdAndUpdate(id, body, {
             new: true,
             runValidators: true,
         });
@@ -107,17 +112,17 @@ exports.bookRouter.put('/:bookId', (req, res) => __awaiter(void 0, void 0, void 
         });
     }
 }));
-exports.bookRouter.delete('/:bookId', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.bookRouter.delete('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const bookId = req.params.bookId;
-        const book = yield book_model_1.Book.findByIdAndDelete(bookId);
+        const id = req.params.id;
+        const book = yield book_model_1.Book.findByIdAndDelete(id);
         if (!book) {
             return res.status(404).json({
                 success: false,
                 message: 'Book not found or already deleted',
             });
         }
-        const checkDeleted = yield book_model_1.Book.findById(bookId);
+        const checkDeleted = yield book_model_1.Book.findById(id);
         res.status(200).json({
             success: true,
             message: 'Book deleted successfully',

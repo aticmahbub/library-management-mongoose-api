@@ -6,34 +6,35 @@ export const borrowRouter = express.Router();
 
 borrowRouter.put('/', async (req: Request, res: Response) => {
     try {
-        const {id, quantity, dueDate} = req.body;
-        console.log(req.body);
-        if (!id || !quantity || !dueDate) {
+        const {book, quantity, dueDate} = req.body;
+
+        if (!book || !quantity || !dueDate) {
             return res
                 .status(400)
                 .json({success: false, message: 'Missing required fields'});
         }
 
-        const book = await Book.findById(id);
-        if (!book) {
+        const foundBook = await Book.findById(book);
+        if (!foundBook) {
             return res
                 .status(404)
                 .json({success: false, message: 'Book not found'});
         }
 
-        if (book.copies < quantity) {
+        if (foundBook.copies < quantity) {
             return res
                 .status(400)
                 .json({success: false, message: 'Not enough copies available'});
         }
 
-        book.copies -= quantity;
-        await book.save();
+        foundBook.copies -= quantity;
+        await foundBook.save();
 
-        await Book.updateAvailability(book._id as Types.ObjectId);
+        await Book.updateAvailability(foundBook._id as Types.ObjectId);
 
-        await Borrow.create({id: book._id, quantity, dueDate});
-        const borrowedBook = await Book.findById(book._id);
+        await Borrow.create({book, quantity, dueDate});
+
+        const borrowedBook = await Book.findById(foundBook._id);
 
         res.status(201).json({
             success: true,

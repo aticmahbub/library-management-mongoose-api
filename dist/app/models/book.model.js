@@ -18,12 +18,12 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const bookSchema = new mongoose_1.Schema({
     title: {
         type: String,
-        required: [true, 'Title is must'],
+        required: [true, 'Title is required'],
         trim: true,
     },
     author: {
         type: String,
-        required: [true, 'Author name is needed'],
+        required: [true, 'Author name is missing'],
     },
     genre: {
         type: String,
@@ -42,7 +42,7 @@ const bookSchema = new mongoose_1.Schema({
     },
     isbn: {
         type: String,
-        required: [true, 'ISBN is required'],
+        required: [true, 'ISBN is missing'],
         unique: true,
     },
     description: {

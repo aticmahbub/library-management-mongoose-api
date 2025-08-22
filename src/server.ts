@@ -1,9 +1,7 @@
-// import express, {Request, Response} from 'express';
 import 'dotenv/config';
 import mongoose from 'mongoose';
 import app from './app';
 
-// let server: Server;
 async function main() {
     try {
         await mongoose.connect(`${process.env.URI}`);

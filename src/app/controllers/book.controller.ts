@@ -1,29 +1,29 @@
 import express, {Request, Response} from 'express';
 import {Book} from '../models/book.model';
-import {SortOrder} from 'mongoose';
+// import {SortOrder} from 'mongoose';
 
 export const bookRouter = express.Router();
 
 bookRouter.get('/', async (req: Request, res: Response) => {
     try {
-        const {
-            filter,
-            sortBy = 'createdAt',
-            sort = 'desc',
-            limit = '10',
-        } = req.query;
+        // const {
+        //     filter,
+        //     sortBy = 'createdAt',
+        //     sort = 'desc',
+        //     limit = '10',
+        // } = req.query;
 
         const query: Record<string, unknown> = {};
-        if (filter) {
-            query.genre = filter.toString().toUpperCase();
-        }
+        // if (filter) {
+        //     query.genre = filter.toString().toUpperCase();
+        // }
 
-        const sortOptions: {[key: string]: SortOrder} = {};
-        sortOptions[sortBy.toString()] = sort === 'asc' ? 'asc' : 'desc';
+        // const sortOptions: {[key: string]: SortOrder} = {};
+        // sortOptions[sortBy.toString()] = sort === 'asc' ? 'asc' : 'desc';
 
-        const books = await Book.find(query)
-            .sort(sortOptions)
-            .limit(Number(limit));
+        const books = await Book.find(query);
+        // .sort(sortOptions)
+        // .limit(Number(limit));
 
         res.status(200).json({
             success: true,
