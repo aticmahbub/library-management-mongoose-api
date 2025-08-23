@@ -9,7 +9,7 @@ app.use(
     cors({
         origin: [
             'http://localhost:5173',
-            'https://library-management-redux-toolkit.vercel.app/',
+            'https://library-management-rtk-query.vercel.app',
         ],
     }),
 );
